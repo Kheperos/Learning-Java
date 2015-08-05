@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<script>
+    var person = {fname:"John", lname:"Doe", age:25};
+    //console.log(person.fname);
+    //console.log(person.lname);
+    //console.log(person.age);
+
+    /*for (var i in person) {
+        console.log(person[i]);
+    }*/
+
+    for (var i = 0 ; i < 3 ; i++){
+    console.log(person["0"]);
+    }
+    var arr = [3, 5, 7];
+    arr.foo = "hello";
+
+    for (var i in arr) {
+        console.log(i); // logs "0", "1", "2", "foo"
+    }
+
+</script>
+</body>
+</html>

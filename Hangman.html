@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+    <!-- JQuery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <title></title>
+
+
+</head>
+<body>
+
+<script>
+$(document).ready(function(){
+    //jQuery methods go here...$('#newThread')
+    //
+    $('#Hangman').on("click", function(){
+         //$(this).hide();
+         //alert('dsaa');
+        document.body.innerHTML = "";
+        var j = 0;
+        var Language_Letters = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","t","s","u","v","x","w","z"];
+        var Language_Library = ["initenariu","cutie","televizor","aparat de aer","frigider","farfurie","birou","calculator"]
+        var i = 0;
+        while (i < Language_Letters.length) {
+            Create_Button(Language_Letters[i],j);
+            i++;
+        }
+
+        var para = document.createElement("p");
+        var node = document.createTextNode("MR");
+        para.appendChild(node);
+        para.id = 'Mine';
+        document.getElementsByTagName('body')[0].appendChild(para);
+        alert(document.getElementById('Mine'));
+
+        document.getElementById('Mine').value = 'Button_ID';
+    });
+    $('#addsubmit').on("click", function(){
+        this.value = 'Mama';
+        alert|('DAAA');
+    });
+
+});
+</script>
+
+<script>
+function Litera_Hangman(Button_Received){
+    Button_Received.disabled = true;
+}
+
+//creates a button and appends an onclick function to it with the parameter (this)
+function Create_Button(Button_ID , Library) {
+    document.body.innerHTML += '<input id ="addsubmit" type="submit" value="Mine" style = "margin-top: 25px;" onclick="Litera_Hangman(this)">';
+    document.getElementById("addsubmit").id = 'Hangman'+Button_ID;
+    document.getElementById('Hangman'+Button_ID).value = Button_ID;
+}
+</script>
+
+<div class="container text-center">
+
+            <div class="btn-group" role="group" aria-label="...">
+                <a id="Hangman" href="#" class="btn btn-primary" role="button">Romanian
+                </a>
+                <a href="#" class="btn btn-primary" role="button">English</a>
+                <a href="#" class="btn btn-warning" role="button">Russian
+                    <span class="glyphicon glyphicon-flag"></span>
+                </a>
+                <a href="#" class="btn btn-danger" role="button">Symbol
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                </a>
+            </div>
+</div>
+
+</body>

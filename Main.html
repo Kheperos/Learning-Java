@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<p id = "paragraph1"> This is the first Java lesson </p>
+
+<p id = "paragraph2"> This is the second Java lesson </p>
+
+<h1 id="myHeader">Hello World!</h1>
+
+
+
+
+<script>
+
+    // declaration of variables;
+    var integer_variable = 10;
+    var string_variable = "ostasi";
+    var array_variable = [10, 11, 33, undefined, 10];
+    var coffees = ["French Roast", "Colombian", "Kona"];
+
+    // adding 2 strings
+    x = "The answer is " + 42 // "The answer is 42"
+
+    //converting strings to numbers
+    parseInt()
+    parseFloat()
+    (+"1.1") + (+"1.1") = 2.2 // using the unary plus operator
+
+    //for objects
+    var car = { manyCars: {a: "Saab", "b": "Jeep"}, 7: "Mazda" };
+    console.log(car.manyCars.b); // Jeep
+    console.log(car[7]); // Mazda
+
+    // differences between String objects and String primitives
+    var s1 = '2 + 2';             // creates a string primitive
+    var s2 = new String('2 + 2'); // creates a String object
+    console.log(eval(s1));        // returns the number 4
+    console.log(eval(s2));        // returns the string "2 + 2"
+    //convert a string object to its primitive counterpart
+    console.log(eval(s2.valueOf())); // returns the number 4
+
+    //compare strings using <  >;
+    //special characters in strings
+/*  \0 	Null Byte
+    \b 	Backspace
+    \f 	Form feed
+    \n 	New line
+    \r 	Carriage return
+    \t 	Tab
+    \v 	Vertical tab
+    \' 	Apostrophe or single quote
+    \" 	Double quote
+    \\ 	Backslash character */
+
+    //for switch
+    switch (fruittype) {
+        case "Oranges":
+            console.log("Oranges are $0.59 a pound.");
+            break;
+        case "Apples":
+            console.log("Apples are $0.32 a pound.");
+            break;
+        case "Bananas":
+            console.log("Bananas are $0.48 a pound.");
+            break;
+        case "Cherries":
+            console.log("Cherries are $3.00 a pound.");
+            break;
+        case "Mangoes":
+            console.log("Mangoes are $0.56 a pound.");
+            break;
+        case "Papayas":
+            console.log("Mangoes and papayas are $2.79 a pound.");
+            break;
+        default:
+            console.log("Sorry, we are out of " + fruittype + ".");
+    }
+    console.log("Is there anything else you'd like?");
+
+    //Error handling by using throw, try and catch instructions and the finally block
+
+    function getMonthName (mo) {
+        mo = mo-1; // Adjust month number for array index (1=Jan, 12=Dec)
+        var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul",
+            "Aug","Sep","Oct","Nov","Dec"];
+        if (months[mo] != null) {
+            return months[mo];
+        } else {
+            throw "InvalidMonthNo"; //throw keyword is used here
+        }
+    }
+
+    try { // statements to try
+        monthName = getMonthName(myMonth); // function could throw exception
+    }
+    catch (e) {
+        monthName = "unknown";
+        logMyErrors(e); // pass exception object to error handler
+    }
+
+    //for Block
+
+    var step;
+    for (step = 0; step < 5; step++) {
+        // Runs 5 times, with values of step 0 through 4.
+        console.log('Walking east one step');
+    }
+
+    //possible blocks in use by javascript
+/*      for statement
+        do...while statement
+        while statement
+        label statement
+        break statement
+        continue statement
+        for...in statement  //e folosit pentru a cicla printre elementele unui object for i in object => object[i].
+        for...of statement*/
+
+
+
+</script>
+
+</body>
+</html>
