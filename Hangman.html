@@ -39,14 +39,24 @@ $(document).ready(function(){
             i++;
         }
 
-        var para = document.createElement("p");
-        var node = document.createTextNode("MR");
-        para.appendChild(node);
-        para.id = 'Mine';
-        document.getElementsByTagName('body')[0].appendChild(para);
-        alert(document.getElementById('Mine'));
-
-        document.getElementById('Mine').value = 'Button_ID';
+        var x = document.createElement("INPUT");
+        x.setAttribute("type", "text");
+        var rand = Language_Library[Math.floor(Math.random() * Language_Library.length)];
+        x.setAttribute("value", rand);
+        x.id = "Hangman_Word";
+        document.body.appendChild(x);
+        var unknown_word = '';
+        for (var i = 0; i < rand.length; i++)
+        {
+            unknown_word = unknown_word+"* ";
+        }
+        document.getElementById("Hangman_Word").value = unknown_word;
+        x = document.createElement("INPUT");
+        x.setAttribute("type", "text");
+        x.id = "Visible_Word";
+        x.setAttribute("value", rand);
+        document.body.appendChild(x);
+        Main_Hangman();
     });
     $('#addsubmit').on("click", function(){
         this.value = 'Mama';
@@ -57,9 +67,37 @@ $(document).ready(function(){
 </script>
 
 <script>
-function Litera_Hangman(Button_Received){
-    Button_Received.disabled = true;
-}
+
+    function Main_Hangman() {
+
+    }
+    function indexes(source, find) {
+        var result = [];
+        for (i = 0; i < source.length; ++i) {
+            if (source.substring(i, i + find.length) == find) {
+                result.push(i);
+            }
+        }
+        return result;
+    }
+    function Litera_Hangman(Button_Received) {
+        if (Button_Received.disabled != true) {
+            Button_Received.disabled = true;
+            var rand = document.getElementById("Visible_Word").value;
+            var My_Array = indexes(rand,Button_Received.value);
+            rand = document.getElementById("Hangman_Word").value;
+            if (My_Array.length == 0) {
+                alert('ai pierdut o viata');
+            }
+            else {
+                alert (rand);
+                for (var i =0; i < My_Array.length ; i++)
+                    rand = rand.substring(0, 2 * My_Array[i]) + Button_Received.value  + rand.substring(2 * My_Array[i]+1);
+                document.getElementById("Hangman_Word").value = rand;
+            }
+        }
+    }
+
 
 //creates a button and appends an onclick function to it with the parameter (this)
 function Create_Button(Button_ID , Library) {
