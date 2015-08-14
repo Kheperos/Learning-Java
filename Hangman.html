@@ -90,7 +90,7 @@ $(document).ready(function(){
                 alert('ai pierdut o viata');
             }
             else {
-                alert (rand);
+                //alert (rand);
                 for (var i =0; i < My_Array.length ; i++)
                     rand = rand.substring(0, 2 * My_Array[i]) + Button_Received.value  + rand.substring(2 * My_Array[i]+1);
                 document.getElementById("Hangman_Word").value = rand;
@@ -108,18 +108,17 @@ function Create_Button(Button_ID , Library) {
 </script>
 
 <div class="container text-center">
-
-            <div class="btn-group" role="group" aria-label="...">
-                <a id="Hangman" href="#" class="btn btn-primary" role="button">Romanian
-                </a>
-                <a href="#" class="btn btn-primary" role="button">English</a>
-                <a href="#" class="btn btn-warning" role="button">Russian
-                    <span class="glyphicon glyphicon-flag"></span>
-                </a>
-                <a href="#" class="btn btn-danger" role="button">Symbol
-                    <span class="glyphicon glyphicon-exclamation-sign"></span>
-                </a>
-            </div>
+    <div class="btn-group" role="group" aria-label="...">
+        <a id="Hangman" href="#" class="btn btn-primary" role="button">Romanian
+        </a>
+        <a href="#" class="btn btn-primary" role="button">English</a>
+        <a href="#" class="btn btn-warning" role="button">Russian
+            <span class="glyphicon glyphicon-flag"></span>
+        </a>
+        <a href="#" class="btn btn-danger" role="button">Symbol
+            <span class="glyphicon glyphicon-exclamation-sign"></span>
+        </a>
+    </div>
 </div>
 
 </body>

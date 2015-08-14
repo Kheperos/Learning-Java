@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+    <!-- JQuery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <title></title>
+
+
+</head>
+<body>
+<script>
+
+
+    function Cars (carsMaker, carsColor, carsYear){
+        this.make = carsMaker;
+        this.color = carsColor;
+        if (carsYear) this.year = carsYear;
+            else this.year = '1800';
+        this.isValid = function () {
+            return this.year;
+        }
+        this.hasmake = function (){
+            return this.make;
+        }
+    }
+    Cars.prototype.isBlue = function (){
+        return true;
+    }
+    Cars.prototype.owner = 'Dead';
+
+    function SmallCars (carsMotor){
+        this.motor = carsMotor;
+    }
+
+    //how to actually inherit with default values:
+    /*function ClassA(sColor) {
+        this.color = sColor;
+        this.sayColor = function () {
+            alert(this.color);
+        };
+    }
+
+    function ClassB(sColor, sName) {
+        //this.newMethod = ClassA;
+        //this.newMethod(sColor);
+        //delete this.newMethod;
+        ClassA.call(this, sColor);
+        this.name = sName;
+        this.sayName = function () {
+            alert(this.name);
+        }
+    }
+*/
+    //SmallCars = Object.create(Cars); //nu functioneaza
+    //SmallCars = new Object(Cars); //mosteneste tot
+    //SmallCars.prototype = Object.create(Cars.prototype); // mosteneste doar ce se afla in prototype
+    //SmallCars = Object(Cars.prototype);// la fel ca mai sus
+    //SmallCars.prototype = Object(Cars); nu mosteneste nimic
+    //SmallCars.prototype = new Cars; //mosteneste tot - apparently the preferred method
+    //SmallCars.prototype = Cars.prototype;
+
+
+    var i = 0;
+    var myCar = new Cars;
+
+    myCar.make = 'Honda';
+    myCar.color = 'Blue';
+    myCar.year = 1985;
+    //for (i in Cars) console.log('myCar.' + i);
+    //console.log('myCar.isBlue() = ' + myCar.isBlue());
+    //console.log('myCar.owner = ' + myCar.owner);
+
+    console.log('/n');
+    Cars.prototype.owner = 'Alive';
+    //console.log('hisCar.year = ' + hisCar.year);
+
+    //console.log('myCar.owner = ' + myCar.owner);
+    //console.log('hisCar.owner = ' + hisCar.owner);
+    //Cars.prototype.year = '1900' //myCar ramane neschimbat si hisCar = undefined ! atentie nu schimba myCar----- FJS
+     // myCar ramane neschimbat - hisCar ia valoarea 1900
+    Cars.prototype.year = '1900';
+    SmallCars = new Object(Cars);
+
+    var hisCar = new SmallCars;
+    hisCar.motor = 'Ferrari';
+    delete hisCar.year;
+    for (i in hisCar) console.log('hisCar.' + i);
+    console.log('hisCar.isBlue() = ' + hisCar.isBlue());
+    console.log('hisCar.owner =  ' + hisCar.owner);
+    console.log('hisCar.year =  ' + hisCar.year);
+    //console.log('myCar.year = ' + myCar.year);
+    //console.log('hisCar.year = ' + hisCar.year);
+    //hisCar.year = '1999';
+
+    //console.log('hisCar.color = ' + hisCar.color);
+    //for (i in hisCar) console.log('hisCar.' + i);*/
+
+
+
+</script>
+</body>

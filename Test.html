@@ -7,24 +7,17 @@
 <body>
 
 <script>
-    var person = {fname:"John", lname:"Doe", age:25};
-    //console.log(person.fname);
-    //console.log(person.lname);
-    //console.log(person.age);
+    var cats = ['Dusty', 'Misty', 'Twiggy'];
+    console.log(cats.length); // 3
 
-    /*for (var i in person) {
-        console.log(person[i]);
-    }*/
+    cats.length = 2;
+    console.log(cats); // logs "Dusty,Misty" - Twiggy has been removed
 
-    for (var i = 0 ; i < 3 ; i++){
-    console.log(person["0"]);
-    }
-    var arr = [3, 5, 7];
-    arr.foo = "hello";
+    cats.length = 0;
+    console.log(cats); // logs nothing; the cats array is empty
 
-    for (var i in arr) {
-        console.log(i); // logs "0", "1", "2", "foo"
-    }
+    cats.length = 3;
+    console.log(cats); // [undefined, undefined, undefined]
 
 </script>
 </body>
