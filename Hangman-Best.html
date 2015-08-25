@@ -16,6 +16,8 @@
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <script scr="">
     <title></title>
 </head>
 <body>
@@ -23,8 +25,13 @@
 <script>
 
     var gameView;
+    var gameObject;
     var gameView2;
     var controller;
+    var gamesWon = 0;
+    var gamesLost = 0;
+    var myViewManager = new ViewManager();
+    var gamesStarted = new Array(HangmanGameModel());
 
 
     function Create_Button_Factory (Button_ID) {
@@ -43,7 +50,7 @@
         return result;
     }
 
-    controller = new HangmanController();
+    //controller = new HangmanController();
 
     function ViewManager(GameView) {
        //refresh views (array modified views
@@ -53,20 +60,24 @@
         this.views.push(newView);
     }
     ViewManager.prototype.updateViews = function(updatedModels) {
-            for (var i in this.views) {
-                var actualView = this.views[i];
-                for (var j in actualView) {
-                    if (actualView.game[j].modified) actualView.refresh();
+        var i;
+        var j;
+        // search all views
+            for (i = 0 ; i < this.views.length ; i++) {
+                //and search all games in each view
+                for (j = 0 ; j<this.views[i].models.length ; j++) {
+                    //if the game has been modified refresh the view
+                    if (this.views[i].models[j].modified) this.views[i].render(this.views[i].models[j]);
                 }
             }
     }
     ViewManager.prototype.unlinkModels = function(deletedModels) {
         for (var i in this.views) {
-            var actualView = this.views[i];
-            for (var j in actualView) {
-                if (actualView.game[j] == deletedModels) {
-                        if (actualView.game.length == 1) delete actualView;
-                        else delete actualView.game[j];
+            for (var j = 0 ; j<this.views[i].models.length ; j++) {
+                if (this.views[i].models[j] == deletedModels) {
+                        //alert(this.views[i].models);
+                        if (this.views[i].game.length == 1) delete this.views[i];
+                        else delete this.views[i].models[j];
                                 }
             }
         }
@@ -87,11 +98,18 @@
     }
     HangmanGameModel.prototype.playTurn = function(letterPlayed) {
         var rand1;
+        var tempWord = '';
         var My_Array = indexes(this.Word_To_Guess,letterPlayed);
-        console.log (My_Array);
         if (My_Array.length == 0) {
             //alert('ai pierdut o viata');
             this.Life_Remaining--;
+            if (this.Life_Remaining == 0)
+            {
+                alert ('Sorry that you lost. Try again!');
+                gamesLost ++;
+                myViewManager.views = new Array();
+                controller = new HangmanController();
+            }
         }
         else {
             rand1 = this.Word_Guessed;
@@ -100,6 +118,18 @@
                 //alert (rand1);
                 this.Word_Guessed = rand1;
             }
+            console.log(tempWord);
+            for (i = 0; i < this.Word_To_Guess.length; i++) {
+                tempWord += this.Word_To_Guess[i] + " ";
+            }
+            console.log(tempWord);
+            if (this.Word_Guessed == tempWord) {
+                alert ('Congratulations. Now try again!');
+                gamesWon ++;
+                myViewManager.views = new Array();
+                controller = new HangmanController();
+            }
+
         }
     }
 
@@ -115,58 +145,70 @@
     }
 
     function ClassicGameView (gameObject) {
-        this.game = gameObject;
+        this.models[0] = gameObject;
     }
     ClassicGameView.prototype = new BaseView;
-    ClassicGameView.prototype.initialize = function() {
+    ClassicGameView.prototype.initialize = function(currentGameModel) {
 
         var i = 0;
-        while (i < this.game.languageUsedLetters.length) {
-            Create_Button_Factory(this.game.languageUsedLetters[i]);
+        while (i < currentGameModel.languageUsedLetters.length) {
+            Create_Button_Factory(currentGameModel.languageUsedLetters[i]);
             i++;
         }
         i = 0;
         //alert (this.game.languageUsedLetters)
-        while (i < this.game.languageUsedLetters.length) {
-            document.getElementById('Hangman'+this.game.languageUsedLetters[i]).onclick = function() {
-                controller.turnAction(this.id , this.game); }
+        while (i < currentGameModel.languageUsedLetters.length) {
+            document.getElementById('Hangman'+currentGameModel.languageUsedLetters[i]).onclick = function() {
+                controller.turnAction(this.id , currentGameModel);
+            }
             i++;
         }
         var x = document.createElement("INPUT");
         x.setAttribute("type", "text");
-        x.setAttribute("value", this.game.Word_To_Guess);
+        x.setAttribute("value", currentGameModel.Word_To_Guess);
         x.id = "Word_To_Guess";
         document.body.appendChild(x);
         x = document.createElement("INPUT");
         x.setAttribute("type", "text");
         x.id = "Word_Guessed";
-        x.setAttribute("value", this.game.Word_Guessed);
+        x.setAttribute("value", currentGameModel.Word_Guessed);
         document.body.appendChild(x);
         x = document.createElement("INPUT");
         x.setAttribute("type", "text");
         x.id = "Life_Remaining";
-        x.setAttribute("value", this.game.Life_Remaining);
+        x.setAttribute("value", currentGameModel.Life_Remaining);
         document.body.appendChild(x);
         x = document.createElement("INPUT");
         x.setAttribute("type", "text");
         x.id = "Alternate_View";
         x.setAttribute("value", 'Alternate View');
         document.body.appendChild(x);
+        x = document.createElement("INPUT");
+        x.setAttribute("type", "text");
+        x.id = "NewGame";
+        x.setAttribute("value", 'NEW GAME');
+        x.onclick = function ()
+        {
+            gamesLost ++;
+            myViewManager.views = new Array();
+            controller = new HangmanController();
+        }
+        document.body.appendChild(x);
         //x.onmouseover = function() { Game_Viewer_2(this.game)};
 
         this.initialized = true;
     }
-    ClassicGameView.prototype.refresh = function() {
-        document.getElementById("Word_To_Guess").value = this.game.Word_To_Guess;
-        document.getElementById("Word_Guessed").value = this.game.Word_Guessed;
-        document.getElementById("Life_Remaining").value = this.game.Life_Remaining;
+    ClassicGameView.prototype.refresh = function(currentGameModel) {
+        document.getElementById("Word_To_Guess").value = currentGameModel.Word_To_Guess;
+        document.getElementById("Word_Guessed").value = currentGameModel.Word_Guessed;
+        document.getElementById("Life_Remaining").value = currentGameModel.Life_Remaining;
     }
-    ClassicGameView.prototype.render = function() {
+    ClassicGameView.prototype.render = function(currentGameModel) {
         if(this.initialized) {
-            this.refresh();
+            this.refresh(currentGameModel);
         }
         else {
-            this.initialize();
+            this.initialize(currentGameModel);
         }
     }
 
@@ -183,6 +225,7 @@
      * Controllers
      */
     function HangmanController(){
+        document.body.innerHTML = "";
         document.body.innerHTML += ''+
         '<div class="container text-center">' +
         '<div class="btn-group" role="group" aria-label="..."> ' +
@@ -193,47 +236,59 @@
         '<a id="Symbol" href="#" class="btn btn-danger" role="button" onclick="controller.startAction(this);">Symbol' +
         '<span class="glyphicon glyphicon-exclamation-sign"></span></a>' +
         '</div>' +
-        '<div class="row text-center">'+
-        '<div class="well col-md-3">Au fost jucate</div>' +
-        '<div class="well col-md-1">3 jocuri</div>' +
+        '<div class="form-group text-center col-md-2">'+
+        '<label for="gamesPlayed">Au fost jucate:</label>' +
+        '<input type="text" class="form-control" id="gamesPlayed">' +
         '</div>'+
-        '<div class="row text-center">' +
-        '<div class="well col-md-3">Cu scorul</div>' +
-        '<div class="well col-md-1">2 - 1</div>' +
-        '</div>' +
+        '<div class="form-group text-center col-md-2">'+
+        '<label for="gamesResults">Cu scorul de:</label>' +
+        '<input type="text" class="form-control" id="gamesResults">' +
+        '</div>'+
         '</div>';
+        document.getElementById('gamesPlayed').value = gamesWon+gamesLost + ' jocuri';
+        document.getElementById('gamesResults').value = gamesWon + ' - ' + gamesLost;
         //start a new game
-        this.gamesStarted = new HangmanGameModel();
     }
 
     HangmanController.prototype.startAction = function (Button) {
-        var gameObject;
+        gamesStarted[0] = gameObject;
         document.body.innerHTML = "";
         var j = 0;
         var i = 0;
+        var rand; //the chosen word
         var languageUsed = ['Romanian', 'English', 'Russian', 'Symbol'];
-        var Language_Library = ["ITINERARIU", "CUTIE", "TELEVIZOR", "AEROPLAN", "FRIGIDER", "FARFURIE", "BIROU", "CALCULATOR"]
+        var Language_Library = [["ITINERARIU", "CUTIE", "TELEVIZOR", "AEROPLAN", "FRIGIDER", "FARFURIE", "BIROU", "CALCULATOR"],
+                                ["TRAVELLER","CROWN","REFRIGERATOR"],
+                                [],
+                                []];
         var Language_Letters = [["A", "\u0102", '\u00C2', "B", "C", "D", "E", "F", "G", "H", "I", "\u00CE", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "\u015E", "T", "\u021A", "U", "V", "W", "X", "Y", "Z"],
                                 ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
                                 [],
                                 []];
 
-        var Language_Letters_Pressed = ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"]
-        var rand = Language_Library[Math.floor(Math.random() * Language_Library.length)];
+        var Language_Letters_Pressed = [["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
+                                        ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
+                                        [],
+                                        []];
+
         var Unknown_Word = '';
-        for (var i = 0; i < rand.length; i++) {
-            Unknown_Word = Unknown_Word + "* ";
-        }
-
+        //start a new game with
         for (i in languageUsed) if (languageUsed[i] == Button.id) {
-            gameObject = new HangmanGameModel(Language_Letters_Pressed, 7, Unknown_Word, rand, languageUsed[i], Language_Letters[i]);
+            //choose a random word from the library
+            rand = Language_Library[i][Math.floor(Math.random() * Language_Library[i].length)];
+            //create the unknown word
+            for (j = 0; j < rand.length; j++) {
+                Unknown_Word = Unknown_Word + "* ";
+            }
+            gameObject = new HangmanGameModel(Language_Letters_Pressed[i], 7, Unknown_Word, rand, languageUsed[i], Language_Letters[i]);
         }
-
         gameView = new ClassicGameView(gameObject);
         gameView2 = new SummaryGameView(gameObject);
+        gameView.initialized = false;
+        gameView2.initialized = false;
         // adds views to view manager myViewManager.views[0] = gameView , myViewManager.views.[1] = gameView2
         myViewManager.addView(gameView);
-        myViewManager.addView(gameView2);
+        //myViewManager.addView(gameView2);
         // announces that the gameObject has been modified and renders the modifications.
         gameObject.modified = true;
         myViewManager.updateViews(gameObject);
@@ -249,11 +304,13 @@
             //console.log(this);
             //gameObjectCurrent.playTurn(letterPlayed);
             //for (var i in gameObject) console.log(i);
-            gameView.game.playTurn(letterPlayed);
+            gameView.models[0].playTurn(letterPlayed);
         }
-        gameView.render();
-        gameView2.render();
+        gameView.render(gameObject);
+        //gameView2.render();
     }
+
+    controller = new HangmanController();
 
 </script>
 </body>
